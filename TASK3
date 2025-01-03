@@ -1,0 +1,51 @@
+import requests
+import pandas as pd
+import plotly.graph_objects as go
+
+# Function to fetch weather data
+def fetch_weather_data(city, API_key):
+    # Use the correct endpoint for 5-day forecast
+    url = f"http://api.openweathermap.org/data/2.5/forecast?q={city}&units=metric&appid={API_key}"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        weather_data = []
+        for item in data['list']:
+            weather_data.append({
+                "datetime": item['dt_txt'],
+                "temperature": item['main']['temp'],
+                "humidity": item['main']['humidity'],
+                "pressure": item['main']['pressure'],
+                "weather": item['weather'][0]['description']
+            })
+        return pd.DataFrame(weather_data)
+    else:
+        print(f"Error: {response.status_code} - {response.text}")
+        return None
+
+# Function to visualize data using Plotly
+def visualize_weather_data(df, city):
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df['datetime'], y=df['temperature'],
+                             mode='lines+markers', name='Temperature (°C)',
+                             line=dict(color='blue', width=2)))
+    fig.update_layout(
+        title=f"Weather Forecast for {city}",
+        xaxis_title="Date & Time",
+        yaxis_title="Temperature (°C)",
+        template="plotly_dark"
+    )
+    fig.show()
+
+# Main execution
+if __name__ == "__main__":
+    # Replace with your actual OpenWeatherMap API key
+    API_key = "c2fe12048bab54cc3a1ba4aac016fccc"  # Replace this with your actual API key
+    city = "New Delhi"  # Change to the desired city
+
+    # Fetch weather data
+    weather_df = fetch_weather_data(city, API_key)
+    if weather_df is not None:
+        print(weather_df)  # Display the data
+        visualize_weather_data(weather_df, city)
