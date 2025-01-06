@@ -1,3 +1,5 @@
+Name:RAJASHEKAR KATTA Company:CODETECH IT SOLUTIONS ID: CT08DBJ Domain:Python Programming
+
 Project Overview: Weather Data Fetching and Visualization
 This project involves fetching weather data for a specific city from the OpenWeatherMap API, processing it, and visualizing it using Plotly. The goal is to retrieve a 5-day weather forecast, 
 extract important details such as temperature, humidity, and pressure, and then present the data in both tabular form and as an interactive graph.
